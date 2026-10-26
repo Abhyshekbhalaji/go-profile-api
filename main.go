@@ -25,23 +25,18 @@ var (
 			Reels:    0,
 		},
 	}
-	nextID    = 2
+	nextID     = 2
 	mutexLock sync.RWMutex
 )
 
 func main() {
-	log.Fatal(http.ListenAndServe(":8080", newMux()))
-}
-
-// newMux builds the application's router so both main and HTTP tests use
-// the same route configuration.
-func newMux() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /users/{userId}", GETHandler)
 	mux.HandleFunc("POST /users", POSTHandler)
 	mux.HandleFunc("PUT /users/{userId}", PUTHandler)
 	mux.HandleFunc("DELETE /users/{userId}", DELETEHandler)
-	return mux
+
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
 
 func GETHandler(w http.ResponseWriter, r *http.Request) {
