@@ -30,13 +30,18 @@ var (
 )
 
 func main() {
+	log.Fatal(http.ListenAndServe(":8080", newMux()))
+}
+
+// newMux registers the API routes. Tests reuse this router without starting
+// a real server on port 8080.
+func newMux() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /users/{userId}", GETHandler)
 	mux.HandleFunc("POST /users", POSTHandler)
 	mux.HandleFunc("PUT /users/{userId}", PUTHandler)
 	mux.HandleFunc("DELETE /users/{userId}", DELETEHandler)
-
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	return mux
 }
 
 func GETHandler(w http.ResponseWriter, r *http.Request) {
